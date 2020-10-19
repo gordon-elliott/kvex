@@ -12,17 +12,21 @@ from sums_exist import no_sums_exist
         # Examples which satisfy the criteria
         ([3, 3, 3], True),
         ([200, 99, 99, 2], True),
+        ([-5, -4, -2], True),
         ([-6, -3, -7, 2, 11], True),
         ([-3, 9, 10] + [18] * 20, True),
         # Examples which do not satisfy the criteria
         ([4, 4, 8], False),
         ([68, 200, 99, 3, 65, 101], False),
         ([68, 200, 100, 100, 3, 9], False),
+        ([-5, -4, -2, 0, -6], False),
         ([-3, -6, -3, 2, 9], False),
         ([-3, 9, 10, 19, 30] + [18] * 20, False),
+        ([2, 4, 12, 14, 5, 8], False),
         # Boundary tests
         ([], True),
+        (None, True),
     ]
 )
-def test_sums_exist(numbers_to_check, expected):
+def test_no_sums_exist(numbers_to_check, expected):
     assert no_sums_exist(numbers_to_check) == expected

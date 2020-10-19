@@ -27,18 +27,25 @@ def no_sums_exist(numbers_to_check: List[int]) -> bool:
     numbers_to_check.sort()
     # to help with early termination, select the maximum input number
     max_number = numbers_to_check[-1]
-    # index of the number which could be a sum matching a pair
-    sum_candidate_index = 0
-    for index in range(len(numbers_to_check) - 1):
-        pair_sum = numbers_to_check[index] + numbers_to_check[index + 1]
-        # if the sum of this pair is greater than the largest number in the list then all subsequent numbers
-        # will also be larger so we can stop looking now
-        if pair_sum > max_number:
-            return True
-        # move the candidate index through the list
-        # until the sum of the current pair is the same or larger than the candidate
-        while sum_candidate_index < len(numbers_to_check) and pair_sum >= numbers_to_check[sum_candidate_index]:
-            if numbers_to_check[sum_candidate_index] == pair_sum:
-                return False
-            sum_candidate_index += 1
+
+    list_length = len(numbers_to_check)
+    for left_index in range(list_length - 1):
+        # index of the number which could be a sum matching a pair
+        # to allow for negative numbers we need to start checking from 0
+        candidate_index = 0
+        for right_index in range(left_index + 1, list_length):
+            # Number pairs must be at distinct indexes and constitute half the possible combinations
+            assert left_index < right_index, f"Unexpected index pair {left_index}, {right_index}"
+
+            pair_sum = numbers_to_check[left_index] + numbers_to_check[right_index]
+            # if the sum of this pair is greater than the largest number in the list then all subsequent sums
+            # will also be larger so we can stop looking at pairs with this left index now
+            if pair_sum > max_number:
+                break
+            # move the candidate index through the list
+            # until the sum of the current pair is the same or larger than the candidate
+            while candidate_index < list_length and pair_sum >= numbers_to_check[candidate_index]:
+                if numbers_to_check[candidate_index] == pair_sum:
+                    return False
+                candidate_index += 1
     return True
